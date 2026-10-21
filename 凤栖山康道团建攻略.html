@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>凤栖山康道 · 光严禅院团建攻略 | 2026.10.24</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231e3f33'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%23d9a441' font-family='serif'%3E%E5%87%A4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --green:#1e3f33;
+  --green-2:#2b5d4a;
+  --green-3:#3d8060;
+  --green-soft:#e9f1ec;
+  --amber:#c8883f;
+  --amber-2:#d9a441;
+  --amber-soft:#f7eee0;
+  --ink:#222a26;
+  --muted:#64706a;
+  --line:#e6e2d9;
+  --bg:#f6f4ef;
+  --card:#ffffff;
+  --radius:18px;
+  --shadow:0 12px 40px rgba(30,63,51,.08);
+  --shadow-sm:0 6px 20px rgba(30,63,51,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;
+}
+.serif{font-family:"Noto Serif SC","Songti SC",serif}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ========== NAV ========== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(246,244,239,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(30,63,51,.07);
+}
+.nav-inner{display:flex;align-items:center;gap:18px;height:62px;max-width:1180px;margin:0 auto;padding:0 24px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:"Noto Serif SC",serif;font-weight:700;color:var(--green);font-size:17px;white-space:nowrap}
+.nav-logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--green-2),var(--green));display:grid;place-items:center;color:#fff;font-size:15px}
+.nav-links{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{padding:7px 13px;border-radius:99px;font-size:14px;color:var(--muted);white-space:nowrap;transition:.2s}
+.nav-links a:hover{background:var(--green-soft);color:var(--green)}
+
+/* ========== HERO ========== */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;color:#fff}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,32,26,.55) 0%,rgba(15,32,26,.35) 40%,rgba(15,32,26,.82) 100%)}
+.hero-inner{position:relative;z-index:2;width:100%;max-width:1180px;margin:0 auto;padding:110px 24px 70px}
+.kicker{display:inline-flex;align-items:center;gap:9px;font-size:13.5px;letter-spacing:.18em;text-transform:uppercase;color:#e8f0eb;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:7px 16px;border-radius:99px;backdrop-filter:blur(6px)}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--amber-2)}
+.hero h1{font-family:"Noto Serif SC",serif;font-weight:900;font-size:clamp(34px,6vw,66px);line-height:1.18;margin:24px 0 18px;text-shadow:0 4px 30px rgba(0,0,0,.3)}
+.hero h1 small{display:block;font-size:.42em;font-weight:500;letter-spacing:.3em;color:#d8e6dd;margin-top:14px}
+.hero p.sub{font-size:clamp(15px,1.8vw,18px);color:#e7eee9;max-width:640px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 34px}
+.hchip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);padding:9px 16px;border-radius:12px;font-size:14px;backdrop-filter:blur(6px)}
+.hchip b{font-weight:600;color:#fff}
+.hchip.rain{background:rgba(201,136,63,.32);border-color:rgba(217,164,65,.5)}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:99px;font-size:15px;font-weight:600;transition:.25s;cursor:pointer;border:none}
+.btn-primary{background:var(--amber-2);color:#2c1f08}
+.btn-primary:hover{background:#e3b355;transform:translateY(-2px)}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn-ghost:hover{background:rgba(255,255,255,.22)}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.75);font-size:12px;letter-spacing:.2em;text-align:center}
+.scroll-hint::after{content:"";display:block;width:1.5px;height:34px;background:rgba(255,255,255,.6);margin:9px auto 0;animation:drop 1.8s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ========== SECTION ========== */
+section{padding:86px 0}
+.sec-head{margin-bottom:46px;max-width:720px}
+.sec-kicker{font-size:13px;letter-spacing:.22em;color:var(--amber);font-weight:600;text-transform:uppercase}
+.sec-title{font-family:"Noto Serif SC",serif;font-weight:700;font-size:clamp(26px,3.6vw,38px);color:var(--green);margin:12px 0 14px}
+.sec-desc{color:var(--muted);font-size:15.5px}
+
+/* ========== OVERVIEW CARDS ========== */
+.ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ov-card{background:var(--card);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow-sm);border:1px solid var(--line);transition:.3s}
+.ov-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.ov-ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:22px;margin-bottom:16px}
+.ov-ic.g{background:var(--green-soft);color:var(--green-2)}
+.ov-ic.a{background:var(--amber-soft);color:var(--amber)}
+.ov-card h3{font-size:16px;color:var(--green);margin-bottom:7px}
+.ov-card p{font-size:14px;color:var(--muted)}
+.ov-card .big{font-size:26px;font-weight:700;color:var(--green);font-family:"Noto Serif SC",serif}
+
+/* ========== WEATHER ========== */
+.weather{background:linear-gradient(160deg,#1e3f33,#274f41)}
+.weather .sec-kicker{color:var(--amber-2)}
+.weather .sec-title{color:#fff}
+.weather .sec-desc{color:#cddbd2}
+.w-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
+.w-main{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);padding:32px;backdrop-filter:blur(8px)}
+.w-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.w-icon{font-size:60px;line-height:1}
+.w-cond{font-family:"Noto Serif SC",serif;font-size:30px;font-weight:700;color:#fff}
+.w-temp{font-size:22px;color:#e7eee9;font-weight:500}
+.w-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.w-tag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:8px 15px;border-radius:10px;font-size:13.5px;color:#dce7e0}
+.w-side{display:flex;flex-direction:column;gap:16px}
+.w-note{background:rgba(217,164,65,.16);border:1px solid rgba(217,164,65,.4);border-radius:var(--radius);padding:24px;color:#f3e6d0}
+.w-note h4{font-size:15px;color:var(--amber-2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.w-note p{font-size:14px;color:#e9dcc4}
+.w-note.alt{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.w-note.alt h4{color:#a9d3bd}
+.w-note.alt p{color:#cddbd2}
+
+/* ========== TIMELINE ========== */
+.tl{position:relative;margin-top:10px}
+.tl::before{content:"";position:absolute;left:128px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--green-3),var(--amber-2))}
+.tl-item{position:relative;display:grid;grid-template-columns:110px 38px 1fr;gap:0;align-items:start;margin-bottom:26px}
+.tl-time{text-align:right;padding-top:2px;font-variant-numeric:tabular-nums}
+.tl-time b{display:block;font-size:17px;color:var(--green);font-weight:700}
+.tl-time span{font-size:12px;color:var(--muted)}
+.tl-dot{position:relative;display:grid;place-items:center;width:38px}
+.tl-dot i{width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--green-3);z-index:2}
+.tl-item.meal .tl-dot i{border-color:var(--amber)}
+.tl-item.hike .tl-dot i{border-color:var(--green-3)}
+.tl-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;box-shadow:var(--shadow-sm);margin-left:22px;transition:.25s}
+.tl-card:hover{transform:translateX(4px);box-shadow:var(--shadow)}
+.tl-card h4{font-size:15.5px;color:var(--green);display:flex;align-items:center;gap:9px}
+.tl-card h4 .tag{font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px}
+.tag-drive{background:var(--green-soft);color:var(--green-2)}
+.tag-meal{background:var(--amber-soft);color:var(--amber)}
+.tag-hike{background:var(--green-soft);color:var(--green-2)}
+.tag-back{background:#f0ebe2;color:var(--muted)}
+.tl-card p{font-size:13.5px;color:var(--muted);margin-top:4px}
+.tl-phase{display:flex;align-items:center;gap:12px;margin:34px 0 22px 110px}
+.tl-phase b{font-family:"Noto Serif SC",serif;color:var(--green-2);font-size:15px;letter-spacing:.1em}
+.tl-phase::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* ========== MAP ========== */
+.map-section{background:#eef2ee}
+.map-box{background:var(--card);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
+.map-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);background:#fbfaf7}
+.map-toolbar .tb-label{font-size:13.5px;font-weight:600;color:var(--green);margin-right:4px}
+.tb-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:99px;font-size:13.5px;border:1px solid var(--line);background:#fff;cursor:pointer;transition:.2s;color:var(--ink)}
+.tb-btn:hover{border-color:var(--green-3);color:var(--green)}
+.tb-btn.amber{background:var(--amber-soft);border-color:#e8d3b4;color:var(--amber);font-weight:600}
+.tb-btn.amber:hover{background:#f2e1c7}
+#map{height:560px;width:100%;z-index:1}
+.map-legend{display:flex;flex-wrap:wrap;gap:18px;padding:14px 20px;border-top:1px solid var(--line);background:#fbfaf7;font-size:13px;color:var(--muted)}
+.lg{display:flex;align-items:center;gap:8px}
+.lg i{width:26px;height:5px;border-radius:3px}
+.lg i.c{background:var(--amber)}
+.lg i.f{background:repeating-linear-gradient(90deg,var(--green-3) 0 6px,transparent 6px 10px)}
+.lg i.n{width:14px;height:14px;border-radius:50%;background:var(--green-3);border:3px solid #fff;box-shadow:0 0 0 1px var(--green-3)}
+/* leaflet markers */
+.nodemarker{background:var(--green-3);border:2.5px solid #fff;border-radius:50%;color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.nodemarker.end{background:var(--green);border-radius:50%}
+.startmarker{background:var(--amber);border:2.5px solid #fff;border-radius:50%;color:#fff;font-weight:700;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.townmarker{background:#fff;border:2.5px solid var(--amber);border-radius:50%;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.leaflet-popup-content-wrapper{border-radius:13px}
+.leaflet-popup-content{margin:13px 17px;font-size:13.5px}
+.pop-name{font-weight:700;color:var(--green);font-size:14.5px}
+.pop-km{color:var(--amber);font-weight:600;font-size:12.5px;margin:2px 0 3px}
+.pop-desc{color:var(--muted);font-size:12.5px}
+
+/* ========== HIKING ========== */
+.hike-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px}
+.hs{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 20px;text-align:center;box-shadow:var(--shadow-sm)}
+.hs b{display:block;font-family:"Noto Serif SC",serif;font-size:28px;color:var(--green)}
+.hs span{font-size:13px;color:var(--muted)}
+.route-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:44px}
+.rc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:.3s;display:flex;flex-direction:column}
+.rc:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.rc-img{height:170px;overflow:hidden;position:relative}
+.rc-img img{width:100%;height:100%;object-fit:cover;transition:.5s}
+.rc:hover .rc-img img{transform:scale(1.06)}
+.rc-badge{position:absolute;top:12px;left:12px;background:rgba(30,63,51,.85);color:#fff;font-size:11.5px;padding:4px 12px;border-radius:99px;backdrop-filter:blur(4px)}
+.rc-body{padding:22px;flex:1;display:flex;flex-direction:column}
+.rc-body h3{font-size:17px;color:var(--green);margin-bottom:8px}
+.rc-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:11px}
+.rc-meta b{color:var(--green-2)}
+.rc-body p{font-size:13.5px;color:var(--muted);flex:1}
+.rc.recommend{border:2px solid var(--amber-2)}
+.rc-flag{background:var(--amber-2);color:#30200a;font-size:12px;font-weight:700;text-align:center;padding:5px}
+
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.info{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:21px;box-shadow:var(--shadow-sm)}
+.info h4{font-size:14.5px;color:var(--green);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.info p{font-size:13.5px;color:var(--muted)}
+.info .free{color:var(--green-3);font-weight:700}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
+.gi{border-radius:14px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:1;box-shadow:var(--shadow-sm)}
+.gi img{width:100%;height:100%;object-fit:cover;transition:.5s}
+.gi:hover img{transform:scale(1.08)}
+.gi.tall{grid-row:span 2;aspect-ratio:auto}
+.gi.wide{grid-column:span 2;aspect-ratio:2}
+
+/* ========== TEMPLE ========== */
+.temple{background:linear-gradient(170deg,#241c12,#3a2c17);color:#efe7d6}
+.temple .sec-kicker{color:var(--amber-2)}
+.temple .sec-title{color:#f7ecd9}
+.temple .sec-desc{color:#cbbfa3}
+.temple-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
+.temple-imgs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.temple-imgs .ti2{border-radius:15px;overflow:hidden;aspect-ratio:3/4}
+.temple-imgs .ti2:first-child{grid-row:span 2;aspect-ratio:3/8.4}
+.temple-imgs img{width:100%;height:100%;object-fit:cover}
+.temple-body h3{font-family:"Noto Serif SC",serif;font-size:22px;color:#f3e3c4;margin-bottom:16px}
+.temple-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+.temple-list li{display:flex;gap:13px;font-size:14.5px;color:#ddcfb0}
+.temple-list li b{color:var(--amber-2);white-space:nowrap}
+.su-card{background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.35);border-radius:16px;padding:22px}
+.su-card h4{color:var(--amber-2);font-size:15px;margin-bottom:10px}
+.su-card p{font-size:13.5px;color:#d9c9a6}
+.su-price{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.su-price span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:6px 14px;border-radius:10px;font-size:13px}
+
+/* ========== LUNCH ========== */
+.food-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.fc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:.3s}
+.fc:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.fc-top{padding:20px 22px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.fc h3{font-size:16.5px;color:var(--green)}
+.fc .loc{font-size:12px;color:var(--muted);margin-top:3px}
+.fc-rating{text-align:right;white-space:nowrap}
+.fc-rating .score{color:var(--amber);font-weight:700;font-size:19px;font-family:"Noto Serif SC",serif}
+.fc-rating .pc{font-size:12px;color:var(--muted)}
+.fc-body{padding:0 22px 20px}
+.fc-dishes{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.fc-dishes span{background:var(--green-soft);color:var(--green-2);font-size:12px;padding:3.5px 11px;border-radius:99px}
+.fc .hl{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
+.fc.pick{border:2px solid var(--amber-2)}
+.fc-flag{background:var(--amber-2);color:#30200a;font-size:12px;font-weight:700;text-align:center;padding:5px}
+.snack-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.snack{background:var(--amber-soft);border:1px solid #ecd9bb;border-radius:13px;padding:13px 19px;font-size:14px}
+.snack b{color:var(--amber)}
+
+/* featured lunch venue */
+.lunch-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+.lunch-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:18px;background:#f3f0e8}
+.lunch-imgs img{width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0}
+.lunch-imgs img:first-child{grid-row:span 2;height:100%}
+.lunch-info{padding:34px}
+.li-rating{display:flex;align-items:baseline;gap:10px;color:var(--muted);font-size:13.5px}
+.li-rating .score{font-family:"Noto Serif SC",serif;font-size:34px;font-weight:700;color:var(--amber);line-height:1}
+.lunch-info h3{font-family:"Noto Serif SC",serif;font-size:26px;color:var(--green);margin:14px 0 18px}
+.li-meta{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
+.li-meta li{font-size:14px;color:var(--muted);display:flex;gap:10px}
+.li-meta li b{color:var(--green);white-space:nowrap}
+.li-desc{font-size:13.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:14px;margin-bottom:16px}
+.li-tags{display:flex;flex-wrap:wrap;gap:8px}
+.li-tags span{background:var(--green-soft);color:var(--green-2);font-size:12.5px;padding:5px 12px;border-radius:99px}
+.foodmarker{background:#fff;border:2.5px solid var(--amber);border-radius:50%;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+
+/* ========== TOWN ========== */
+.town-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
+.town-img{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.town-img img{width:100%;height:200px;object-fit:cover}
+.town-img img:first-child{grid-column:span 2;height:260px}
+.town-body h3{font-family:"Noto Serif SC",serif;font-size:24px;color:var(--green);margin-bottom:14px}
+.town-body p{font-size:14.5px;color:var(--muted);margin-bottom:12px}
+.town-body .points{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.town-body .points span{background:var(--green-soft);color:var(--green-2);font-size:12.5px;padding:5px 13px;border-radius:99px}
+
+/* ========== TIPS / GEAR ========== */
+.tips{background:#eef2ee}
+.tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.plan{background:var(--card);border-radius:var(--radius);border:1px solid var(--line);padding:30px;box-shadow:var(--shadow-sm)}
+.plan h3{font-size:18px;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.plan h3 .n{width:30px;height:30px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.plan.rain-plan h3 .n{background:var(--amber)}
+.gear-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.gear-list li{display:flex;gap:9px;font-size:14px;color:var(--ink)}
+.gear-list li::before{content:"✓";color:var(--green-3);font-weight:700}
+.plan-rows{display:flex;flex-direction:column;gap:16px}
+.plan-row{display:flex;gap:14px}
+.plan-row .t{flex-shrink:0;width:74px;font-weight:700;color:var(--amber);font-size:13.5px;padding-top:2px}
+.plan-row .c{font-size:14px;color:var(--muted)}
+.plan-row .c b{color:var(--green)}
+.tip-list{display:flex;flex-direction:column;gap:13px;margin-top:30px}
+.tip-list li{display:flex;gap:12px;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px 19px;list-style:none}
+.tip-list li .n{color:var(--amber-2);font-weight:700;flex-shrink:0}
+
+/* ========== FOOTER ========== */
+footer{background:var(--green);color:#c5d6cc;padding:54px 0 40px}
+.foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.foot-logo{font-family:"Noto Serif SC",serif;font-size:20px;color:#fff;margin-bottom:10px}
+footer p{font-size:13px;max-width:620px;color:#9fb8aa}
+.disclaim{margin-top:26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);font-size:12.5px;color:#8fa99b}
+
+/* back to top */
+.to-top{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:var(--green);color:#fff;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(14px);transition:.3s;z-index:900;display:grid;place-items:center;font-size:19px}
+.to-top.show{opacity:1;transform:translateY(0)}
+
+/* lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(10,20,16,.93);z-index:2000;display:none;align-items:center;justify-content:center;padding:50px}
+.lightbox.show{display:flex}
+.lightbox img{max-width:92vw;max-height:84vh;border-radius:12px;box-shadow:0 20px 80px rgba(0,0,0,.5)}
+.lb-close{position:absolute;top:22px;right:26px;color:#fff;font-size:32px;cursor:pointer;background:none;border:none;line-height:1}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);width:52px;height:52px;border-radius:50%;font-size:24px;cursor:pointer}
+.lb-nav:hover{background:rgba(255,255,255,.22)}
+.lb-prev{left:26px}.lb-next{right:26px}
+.lb-cap{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:#dce7e0;font-size:13.5px;background:rgba(0,0,0,.4);padding:7px 18px;border-radius:99px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width:960px){
+  .ov-grid{grid-template-columns:repeat(2,1fr)}
+  .w-grid{grid-template-columns:1fr}
+  .hike-stats{grid-template-columns:repeat(2,1fr)}
+  .route-cards{grid-template-columns:1fr}
+  .info-grid{grid-template-columns:1fr}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+  .temple-grid{grid-template-columns:1fr}
+  .food-grid{grid-template-columns:1fr}
+  .town-grid{grid-template-columns:1fr}
+  .lunch-hero{grid-template-columns:1fr}
+  .lunch-imgs img:first-child{height:auto}
+  .tips-grid{grid-template-columns:1fr}
+  .tl::before{left:18px}
+  .tl-item{grid-template-columns:38px 1fr;column-gap:0}
+  .tl-time{position:absolute;left:48px;top:-20px;text-align:left;z-index:2}
+  .tl-time span{display:none}
+  .tl-dot{grid-column:1}
+  .tl-card{grid-column:2;margin-left:12px}
+  .tl-phase{margin:30px 0 18px 6px}
+  #map{height:440px}
+}
+@media (max-width:560px){
+  section{padding:64px 0}
+  .ov-grid{grid-template-columns:1fr}
+  .gear-list{grid-template-columns:1fr}
+  .hero-btns .btn{flex:1;justify-content:center}
+  .lb-nav{width:42px;height:42px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top"><span class="mark">凤</span>凤栖山团建攻略</a>
+    <div class="nav-links">
+      <a href="#overview">速览</a>
+      <a href="#weather">天气</a>
+      <a href="#timeline">行程</a>
+      <a href="#lunch">午餐</a>
+      <a href="#track">轨迹</a>
+      <a href="#hiking">徒步</a>
+      <a href="#temple">古寺</a>
+      <a href="#tips">贴士</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="hero-bg">
+    <img src="https://p11-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/9540b70357744d0bad1e65fddf687f09~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807945414&x-signature=JUdCz2FYFFZLpTlVdG4TeLCBdVg%3D" alt="凤栖山康道牌坊">
+  </div>
+  <div class="hero-inner">
+    <span class="kicker"><span class="dot"></span>崇州 · 一日团建 · 2026年10月24日 周六</span>
+    <h1>凤栖山康道 · 光严禅院
+      <small>竹林吸氧 · 千年古刹 · 街子古镇</small>
+    </h1>
+    <p class="sub">从成都武侯区机投桥出发，自驾约 1 小时直达；5 公里平缓森林步道藏于竹海，终点为晋代千年古寺，全程免门票，半日徒步、半日古镇悠闲。</p>
+    <div class="hero-chips">
+      <span class="hchip rain">☔ <b>小雨 15~19℃</b></span>
+      <span class="hchip">🚗 <b>车程约 58km</b></span>
+      <span class="hchip">🥾 <b>徒步单程 5km</b></span>
+      <span class="hchip">🎫 <b>门票 0 元</b></span>
+      <span class="hchip">⛰️ <b>爬升 272m</b></span>
+    </div>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#timeline">查看完整行程</a>
+      <a class="btn btn-ghost" id="hero-nav" href="#track">🗺️ 地图轨迹</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="overview">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">OVERVIEW · 速览</div>
+      <h2 class="sec-title">出发前，四个关键信息</h2>
+      <p class="sec-desc">目的地、路线、天气与消费一页看清，适合转发给团队成员。</p>
+    </div>
+    <div class="ov-grid">
+      <div class="ov-card reveal">
+        <div class="ov-ic g">📍</div>
+        <h3>目的地</h3>
+        <p>崇州市街子镇凤栖山「康道」，终点光严禅院，下山即街子古镇（4A）。</p>
+      </div>
+      <div class="ov-card reveal">
+        <div class="ov-ic a">🚗</div>
+        <h3>自驾路线</h3>
+        <p class="big">约58km</p>
+        <p>日月大道 → S8成名高速 → SA2二绕（小段）→ 成街快速路，约 1h20min。</p>
+      </div>
+      <div class="ov-card reveal">
+        <div class="ov-ic a" id="ovWeatherIcon">⏳</div>
+        <h3>10 月 24 日天气</h3>
+        <p class="big" id="ovWeatherCond">加载中</p>
+        <p id="ovWeatherDetail">正在请求凤栖山当日预报…</p>
+      </div>
+      <div class="ov-card reveal">
+        <div class="ov-ic g">💰</div>
+        <h3>基础花费</h3>
+        <p class="big">¥17 起</p>
+        <p>门票免费；停车 15、小巴 2 元，餐饮及其他消费由团队自行安排。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEATHER ============ -->
+<section class="weather" id="weather">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">WEATHER · 天气</div>
+      <h2 class="sec-title">10 月 24 日 · 崇州凤栖山天气</h2>
+      <p class="sec-desc">山区海拔近 900m，体感通常低于平原 3-5℃。</p>
+    </div>
+    <div class="w-grid">
+      <div class="w-main reveal">
+        <div class="w-row">
+          <div class="w-icon" id="weatherIcon">⏳</div>
+          <div>
+            <div class="w-cond" id="weatherCond">正在加载</div>
+            <div class="w-temp" id="weatherTemp">—</div>
+          </div>
+        </div>
+        <div class="w-tags" id="weatherTags">
+          <span class="w-tag">正在请求 Open-Meteo 当日预报…</span>
+        </div>
+      </div>
+      <div class="w-side reveal">
+        <div class="w-note">
+          <h4 id="weatherAdviceTitle">🥾 徒步提示</h4>
+          <p id="weatherAdvice">正在根据当日天气生成建议…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">ITINERARY · 时间轴</div>
+      <h2 class="sec-title">上午爬山 · 13:30 午餐 · 下午自由活动</h2>
+      <p class="sec-desc">抵达后即走康道徒步上山（约 2 小时），乘小巴下山，最迟 13:30 在「不远·如院」午餐；饭后自由活动，可玩德州扑克、麻将或逛古镇，18:00–19:00 晚餐。</p>
+    </div>
+
+    <div class="tl reveal">
+      <div class="tl-phase"><b>上午 · 出发与爬山</b></div>
+      <div class="tl-item">
+        <div class="tl-time"><b>9:00</b><span>集合</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>机投桥地铁站附近集合 <span class="tag tag-drive">集合</span></h4>
+          <p>清点人数、车队编组，确认油量/胎压与雨具，约定高速跟车与对讲机联络。</p>
+        </div>
+      </div>
+      <div class="tl-item drive">
+        <div class="tl-time"><b>9:15</b><span>出发</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>准时出发 <span class="tag tag-drive">自驾 58km</span></h4>
+          <p>武青北路 → 日月大道快速路 → S8成名高速 → SA2二绕（约5km）→ 成街快速路 → 街子古镇。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time"><b>10:30</b><span>抵达</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>抵达康道停车场 <span class="tag tag-drive">停车</span></h4>
+          <p>导航务必选「康道 / 圣灯广场」，周末停车 15 元/天；停好车后上洗手间、补给饮水、合影热身。</p>
+        </div>
+      </div>
+      <div class="tl-item hike">
+        <div class="tl-time"><b>10:40</b><span>开始徒步</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>康道徒步上山 <span class="tag tag-hike">约 2h · 5km</span></h4>
+          <p>康道牌坊 → 御龙桥 → 乳泉瀑布 → 回龙院 → 洗心池 → 忘归台 → 光严禅院。竹海溪流相伴，量力而行，回龙院备齐水和零食。</p>
+        </div>
+      </div>
+      <div class="tl-item hike">
+        <div class="tl-time"><b>12:50</b><span>登顶</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>抵达光严禅院 <span class="tag tag-hike">终点</span></h4>
+          <p>晋代千年古寺，稍作休息、参观古寺；随后在路口乘便民小巴下山，护膝省力。</p>
+        </div>
+      </div>
+      <div class="tl-item drive">
+        <div class="tl-time"><b>12:50-13:20</b><span>小巴下山</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>乘便民小巴下山 <span class="tag tag-drive">2元/人</span></h4>
+          <p>小巴沿公路直达古镇/广场，约 15–20 分钟；下车后步行至「不远·如院」汇合，13:30 前入座。</p>
+        </div>
+      </div>
+
+      <div class="tl-phase"><b>中午 · 午餐</b></div>
+      <div class="tl-item meal">
+        <div class="tl-time"><b>13:30-14:30</b><span>午餐</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>不远·如院 午餐 <span class="tag tag-meal">云南菜 · 最迟13:30</span></h4>
+          <p>云南菜 + 茶馆，院子与楼顶可眺望远山；室内长桌宽敞，饭后即可在此玩牌、喝茶。</p>
+        </div>
+      </div>
+
+      <div class="tl-phase"><b>下午 · 自由活动</b></div>
+      <div class="tl-item">
+        <div class="tl-time"><b>14:30-18:00</b><span>自由活动</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>自由活动 <span class="tag tag-back">德州 · 麻将</span></h4>
+          <p>可在不远如院玩德州扑克、麻将，或到街子古镇逛吃、江边喝茶；各小组自行安排，注意集合时间。</p>
+        </div>
+      </div>
+
+      <div class="tl-phase"><b>晚上 · 晚餐</b></div>
+      <div class="tl-item meal">
+        <div class="tl-time"><b>18:00-19:00</b><span>晚餐</span></div>
+        <div class="tl-dot"><i></i></div>
+        <div class="tl-card">
+          <h4>晚餐 <span class="tag tag-meal">18–19点</span></h4>
+          <p>预计 18:00–19:00 用餐，具体地点由团队安排；餐后返程。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LUNCH VENUE ============ -->
+<section id="lunch">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">LUNCH · 午餐</div>
+      <h2 class="sec-title">午餐 · 不远·如院</h2>
+      <p class="sec-desc">最迟 13:30 开餐。云南菜 + 茶馆，院子与楼顶可眺望远山；室内长桌宽敞，饭后即可在此玩德州扑克、麻将或喝茶。</p>
+    </div>
+    <div class="lunch-hero reveal">
+      <div class="lunch-imgs">
+        <img src="https://p0.meituan.net/dpmerchantpic/c186bb9ba91c9c2a34433e50dbd588b6414786.jpg@1000w_1000h_0e_1l%7Cwatermark%3D1%26%26r%3D1%26p%3D9%26x%3D2%26y%3D2%26relative%3D1%26o%3D20" alt="院子茶座">
+        <img src="https://p0.meituan.net/dpmerchantpic/681508843a0c8dfd0f7e36a61cad66e8317245.jpg@1000w_1000h_0e_1l%7Cwatermark%3D1%26%26r%3D1%26p%3D9%26x%3D2%26y%3D2%26relative%3D1%26o%3D20" alt="门店入口">
+        <img src="https://p1.meituan.net/dpmerchantpic/d092b829019b2eb9df33223d403dff0e162516.jpg@1000w_1000h_0e_1l%7Cwatermark%3D1%26%26r%3D1%26p%3D9%26x%3D2%26y%3D2%26relative%3D1%26o%3D20" alt="室内长桌茶席">
+      </div>
+      <div class="lunch-info">
+        <div class="li-rating"><span class="score">4.4</span><span>16 条评价 · 云南菜 / 茶馆</span></div>
+        <h3>不远·如院</h3>
+        <ul class="li-meta">
+          <li><b>⏰ 营业</b>09:00–21:00</li>
+          <li><b>📍 地址</b>街子镇川西旅游线与花园巷交叉口东 80 米</li>
+          <li><b>🍽️ 风味</b>云南菜（滇味）、古树滇红、茶食</li>
+          <li><b>💰 人均</b>约 ¥100–150（网友实测约 ¥150/人）</li>
+          <li><b>📞 电话</b>15692889768</li>
+        </ul>
+        <p class="li-desc">门店设计有质感：古法鱼缸、实木家具、花艺与 Marshall 音箱，餐前喝古树滇红，茶具多为云南建水陶器。评价称"吃饭喝茶的好去处，云南菜好吃，楼顶可眺望远山"；饭后可在室内长桌玩牌、喝茶，雨天也不受影响。</p>
+        <div class="li-tags">
+          <span>院子</span><span>楼顶远山</span><span>室内长桌</span><span>德州扑克</span><span>麻将</span><span>喝茶</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAP TRACK ============ -->
+<section class="map-section" id="track">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">SCENIC TRACK · 景区轨迹</div>
+      <h2 class="sec-title">景区游玩轨迹 · 康道</h2>
+      <p class="sec-desc">基于 OpenStreetMap 开放路径数据生成、叠加高德地图瓦片；绿色虚线为康道徒步游玩轨迹，可缩放、点选节点查看。（自驾路线详见上方时间轴与右侧导航按钮）</p>
+    </div>
+    <div class="map-box reveal">
+      <div class="map-toolbar">
+        <span class="tb-label">地图操作：</span>
+        <button class="tb-btn" id="btn-play">▶ 播放轨迹</button>
+        <button class="tb-btn" id="btn-reset">⟲ 全览</button>
+        <button class="tb-btn amber" id="btn-nav-car">🧭 高德导航到康道</button>
+      </div>
+      <div id="map"></div>
+      <div class="map-legend">
+        <span class="lg"><i class="f"></i>康道徒步段（约 5km）</span>
+        <span class="lg"><i class="n"></i>徒步节点（共 7 处）</span>
+        <span class="lg"><span style="display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:2px solid var(--amber);font-size:10px">🍽️</span>午餐 · 不远如院</span>
+        <span style="margin-left:auto">底图：高德地图 · 路径数据：OSRM / OpenStreetMap</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HIKING ============ -->
+<section id="hiking">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">HIKING · 徒步攻略</div>
+      <h2 class="sec-title">康道，怎么走最舒服</h2>
+      <p class="sec-desc">康道是地震后修缮的「健康步道」，石板路、木栈道与石阶交替，竹海溪流相伴，是成都周边新手友好的经典轻徒步。</p>
+    </div>
+
+    <div class="hike-stats reveal">
+      <div class="hs"><b>5km</b><span>单程里程</span></div>
+      <div class="hs"><b>272m</b><span>累计爬升</span></div>
+      <div class="hs"><b>2-2.5h</b><span>上山时长</span></div>
+      <div class="hs"><b>★★☆</b><span>难度（满分5）</span></div>
+    </div>
+
+    <div class="route-cards reveal">
+      <div class="rc">
+        <div class="rc-img">
+          <img src="https://aka.doubaocdn.com/s/rUbUcfmYvv" alt="木栈道">
+          <span class="rc-badge">亲子 · 轻松</span>
+        </div>
+        <div class="rc-body">
+          <h3>路线一 · 亲子轻松线</h3>
+          <div class="rc-meta"><span>里程 <b>2.8km</b></span><span>用时 <b>1.5h 往返</b></span></div>
+          <p>康道牌坊 → 乳泉瀑布 → 回龙院折返。全程平缓沿河，玩水点多，有茶馆、厕所与小吃摊，适合体力一般或雨大时的队伍。</p>
+        </div>
+      </div>
+      <div class="rc recommend">
+        <div class="rc-flag">✦ 90% 的团队选这条</div>
+        <div class="rc-img">
+          <img src="https://aka.doubaocdn.com/s/U2QUEGhmUv" alt="竹林步道">
+          <span class="rc-badge">经典 · 推荐</span>
+        </div>
+        <div class="rc-body">
+          <h3>路线二 · 经典主线</h3>
+          <div class="rc-meta"><span>上山 <b>5km / 2-2.5h</b></span><span>下山 <b>小巴 2元</b></span></div>
+          <p>康道牌坊 → 御龙桥 → 乳泉瀑布 → 回龙院 → 洗心池 → 忘归台 → 光严禅院。徒步上山、坐小巴下山，省力护膝，半日走完。</p>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-img">
+          <img src="https://aka.doubaocdn.com/s/HKSLSHv3XC" alt="石拱桥">
+          <span class="rc-badge">进阶 · 纯徒步</span>
+        </div>
+        <div class="rc-body">
+          <h3>路线三 · 完整环线</h3>
+          <div class="rc-meta"><span>里程 <b>约 8km</b></span><span>用时 <b>3.5h</b></span></div>
+          <p>康道上山、后山土路环线下山。后半段有少量泥路，<b>雨后湿滑，当日不推荐</b>，适合天气晴好时的徒步爱好者。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-grid reveal">
+      <div class="info">
+        <h4>🎫 门票</h4>
+        <p><span class="free">康道全程免费</span>；光严禅院收取清洁费 <b>2 元/人</b>，无预约、无景区服务费。</p>
+      </div>
+      <div class="info">
+        <h4>🅿️ 停车</h4>
+        <p>康道入口大型停车场，<b>工作日 10 元 / 周末 15 元</b>（不限时），车位较充足。</p>
+      </div>
+      <div class="info">
+        <h4>🚐 下山小巴</h4>
+        <p>便民小巴 <b>2 元/人</b>，沿公路直达古镇/广场，<b>17:30 停运</b>；村民车约 10 元/人。</p>
+      </div>
+      <div class="info">
+        <h4>🍜 沿途补给</h4>
+        <p>小卖部与小吃摊（凉面、炸土豆、玉米、饮料），<b>回龙院之后基本无补给</b>，部分摊位需现金。</p>
+      </div>
+      <div class="info">
+        <h4>🚻 厕所</h4>
+        <p>圣灯广场、回龙院、光严禅院均设有公共厕所；中途休息点可解决。</p>
+      </div>
+      <div class="info">
+        <h4>🏅 登顶纪念</h4>
+        <p>山顶可直接购买奖牌：<b>单人 19.9 / 双人 29.9 / 三人 48</b>，无需打卡做任务。</p>
+      </div>
+    </div>
+
+    <div class="gallery reveal">
+      <div class="gi tall"><img src="https://p3-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/9507a07986b04bc8aba2c33cbb412dad~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807946057&x-signature=mWMFtbJtCQDLOVY0RjSOqB6zMCQ%3D" alt="吊桥" data-cap="康道吊桥"></div>
+      <div class="gi"><img src="https://p11-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/d02b078858694659a6b392c12e7d2f1d~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807945414&x-signature=jrhum2u2dJ3SXZiczfsAdpoDrvQ%3D" alt="溪间汀步" data-cap="沿溪汀步"></div>
+      <div class="gi"><img src="https://aka.doubaocdn.com/s/URIJC8rxwD" alt="竹林台阶" data-cap="竹海石阶"></div>
+      <div class="gi wide"><img src="https://p11-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/530df47a540c44d9819686dae2aa1012~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807946057&x-signature=r2NJ%2FFSAGldupgZltHAIJsVIQ5E%3D" alt="林荫台阶" data-cap="林荫石阶"></div>
+      <div class="gi"><img src="https://aka.doubaocdn.com/s/UIGY2ojVna" alt="竹林小径" data-cap="竹林小径"></div>
+      <div class="gi"><img src="https://p3-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/96427fd3c454450bbdbe209c7af73503~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807946057&x-signature=1I2ctAgVpahtqzExCoucf7y3n5A%3D" alt="古石桥溪流" data-cap="古石桥与溪流"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEMPLE ============ -->
+<section class="temple" id="temple">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">GUANGYAN TEMPLE · 光严禅院</div>
+      <h2 class="sec-title">竹海深处，晋代千年古寺</h2>
+      <p class="sec-desc">光严禅院又名「古寺」，始建于晋代，距今 1700 余年，被誉为「西川第一天」，隐于近千亩古森林之中。</p>
+    </div>
+    <div class="temple-grid reveal">
+      <div class="temple-imgs">
+        <div class="ti2"><img src="https://p26-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/b4ac3324ecc442a7baff95e5efe473b1~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807945414&x-signature=NK8Jiht5HjZAaEJNDH5DOzC9808%3D" alt="光严禅院全景"></div>
+        <div class="ti2"><img src="https://p3-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/c3db654074c345aaaf3f23d3462e3fb1~tplv-be4g95zd3a-896x896.jpeg?lk3s=0ed4045e&x-expires=1807945414&x-signature=KjJEJPa5PnU0LSXZnhsZkfwLO2k%3D" alt="光严禅院山门"></div>
+      </div>
+      <div class="temple-body">
+        <h3>古寺看点</h3>
+        <ul class="temple-list">
+          <li><b>千年金丝楠木</b><span>树龄约 1700 年，底部周长 5.2 米，需四人合抱；四周古柏古楠成林。</span></li>
+          <li><b>康熙御题匾额</b><span>寺门悬清代康熙帝御题「光严禅院」匾额，禅意对联犹存。</span></li>
+          <li><b>寺藏三件文物</b><span>下古寺藏有初刻南藏、贝叶梵文、御赐极品三件珍贵文物。</span></li>
+          <li><b>清幽与寺猫</b><span>夏季气温较平原低 4-5℃，红墙竹影、寺猫闲卧，是静心好去处。</span></li>
+        </ul>
+        <div class="su-card">
+          <h4>🍚 禅院素斋「随缘」· 11:30 起供应</h4>
+          <p>进门右手边，现炒素菜与豆花，性价比高，推荐笋子、虎皮青椒、凉粉、南瓜汤、素“回锅肉”。</p>
+          <div class="su-price">
+            <span>素菜 15 元/份</span>
+            <span>豆花 10 元/碗</span>
+            <span>米饭 2 元/位</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOWN ============ -->
+<section id="town">
+  <div class="wrap">
+    <div class="town-grid reveal">
+      <div class="town-img">
+        <img src="https://aka.doubaocdn.com/s/mK4D9GtfEE" alt="街子古镇航拍">
+        <img src="https://aka.doubaocdn.com/s/V64mOoaUMG" alt="古镇秋色">
+        <img src="https://aka.doubaocdn.com/s/RJjXFTS39M" alt="古镇小巷">
+      </div>
+      <div class="town-body">
+        <h3>下山之后，逛街子古镇</h3>
+        <p>街子古镇为国家 4A 级景区，位于凤栖山下、味江之畔，距今逾千年，保留清代川西民居风貌，有青石板路、字库塔、唐公祠、御龙桥等古迹。</p>
+        <p>节奏建议：午餐前后逛主街，下午徒步后在江边喝茶、等队友；若安排晚餐，可在古镇吃完再返程。</p>
+        <div class="points">
+          <span>字库塔</span><span>御龙桥</span><span>唐求故里</span><span>银杏广场</span><span>味江</span><span>瑞龙桥</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIPS ============ -->
+<section class="tips" id="tips">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">TIPS · 装备与备选</div>
+      <h2 class="sec-title">装备清单 & 雨天备选方案</h2>
+      <p class="sec-desc">当日预报有小雨，请按"防雨 + 防滑"准备；同时给出轻量版行程，雨大时可直接切换。</p>
+    </div>
+    <div class="tips-grid reveal">
+      <div class="plan">
+        <h3><span class="n">1</span>装备清单</h3>
+        <ul class="gear-list">
+          <li>雨衣（优于雨伞）</li>
+          <li>防滑运动鞋</li>
+          <li>备用干袜</li>
+          <li>薄外套（山顶凉）</li>
+          <li>饮用水 + 能量零食</li>
+          <li>手机防水袋</li>
+          <li>身份证</li>
+          <li>少量现金</li>
+        </ul>
+      </div>
+      <div class="plan rain-plan">
+        <h3><span class="n">2</span>雨天备选（轻量版）</h3>
+        <div class="plan-rows">
+          <div class="plan-row">
+            <div class="t">11:00-12:30</div>
+            <div class="c">按原计划出发、午餐，<b>节奏不变</b>。</div>
+          </div>
+          <div class="plan-row">
+            <div class="t">13:45-15:30</div>
+            <div class="c">走<b>亲子轻松线</b>：康道 → 乳泉瀑布 → 回龙院折返（约 2.8km、1.5-2h），穿好雨衣。</div>
+          </div>
+          <div class="plan-row">
+            <div class="t">15:30-16:30</div>
+            <div class="c">古镇茶馆休整、江边逛吃，避开持续降雨时段。</div>
+          </div>
+          <div class="plan-row">
+            <div class="t">16:30 返程</div>
+            <div class="c">提前返程，约 <b>17:50</b> 抵达机投桥；当日不走 8km 后山环线。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="tip-list reveal">
+      <li><span class="n">01</span>导航务必选「康道 / 圣灯广场」，不要直接导航「凤栖山 / 光严禅院」，否则会沿公路开到山顶、错过整条徒步道。</li>
+      <li><span class="n">02</span>下山便民小巴 17:30 停运，请按这个时间倒推登山节奏；雨后小巴运营以现场为准。</li>
+      <li><span class="n">03</span>回龙院之后基本无补给、无厕所，水和零食在回龙院备齐；部分小吃摊需现金。</li>
+      <li><span class="n">04</span>川A/川G 装 ETC 走 S8 成温邛段由政府统缴，SA2 二绕小段约 5 元自费；不想走收费路段可走免费的成温邛快速路（约多 10 分钟）。</li>
+      <li><span class="n">05</span>车队出行提前加满油、统一导航点，高速上保持车距；雨后高速行车注意降速、开雾灯。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">凤栖山康道 · 光严禅院团建攻略</div>
+        <p>2026年10月24日（周六）· 成都武侯区机投桥出发 · 自驾一日往返</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start">
+        <a class="btn btn-primary" style="padding:11px 22px;font-size:14px" href="#timeline">查看行程</a>
+        <a class="btn btn-ghost" style="padding:11px 22px;font-size:14px" href="#track">地图轨迹</a>
+      </div>
+    </div>
+    <div class="disclaim">
+      免责声明：本页天气、里程、价格、评分、餐厅等信息均于 2026 年 10 月 19 日通过中国天气网、墨迹天气、高德地图、OpenStreetMap/OSRM、携程、大众点评等公开渠道在线采集，可能随时间变动，出行前请以官方当日信息为准。图片来自公开网络，版权归原作者所有，仅作内部团建参考。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="回到顶部">↑</button>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-nav lb-next" id="lbNext">›</button>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ============ MAP DATA (GCJ-02) ============ */
+const MAP_DATA = {"car": [[103.978131, 30.646027], [103.97802, 30.647779], [103.977977, 30.648466], [103.977939, 30.649085], [103.977934, 30.649153], [103.977877, 30.650084], [103.977843, 30.650603], [103.977708, 30.652672], [103.977636, 30.653797], [103.977566, 30.654878], [103.977532, 30.655411], [103.97747, 30.656257], [103.977374, 30.657767], [103.977361, 30.658051], [103.977349, 30.658318], [103.977273, 30.65971], [103.977265, 30.65986], [103.97714, 30.662008], [103.97713, 30.662122], [103.97693, 30.663913], [103.976928, 30.66393], [103.976646, 30.665818], [103.976445, 30.667428], [103.976368, 30.667922], [103.976284, 30.66848], [103.976248, 30.668726], [103.976235, 30.668809], [103.976198, 30.669092], [103.975974, 30.670809], [103.975965, 30.670877], [103.975952, 30.670979], [103.97595, 30.670996], [103.975933, 30.671101], [103.975979, 30.671563], [103.975764, 30.673196], [103.975749, 30.673312], [103.975676, 30.673482], [103.975667, 30.673657], [103.975639, 30.674036], [103.975359, 30.674094], [103.974867, 30.674246], [103.974625, 30.674319], [103.973098, 30.674771], [103.971645, 30.6752], [103.971138, 30.675348], [103.970363, 30.675576], [103.97013, 30.675645], [103.968619, 30.676066], [103.968138, 30.676215], [103.967515, 30.676397], [103.96695, 30.67656], [103.966783, 30.676563], [103.96652, 30.676631], [103.966353, 30.676628], [103.965665, 30.676826], [103.965405, 30.676899], [103.961374, 30.678055], [103.959997, 30.678481], [103.957597, 30.679225], [103.956117, 30.679723], [103.956073, 30.679738], [103.954677, 30.680183], [103.954116, 30.68039], [103.953401, 30.68072], [103.95287, 30.680992], [103.952725, 30.681079], [103.952191, 30.681401], [103.952079, 30.68147], [103.951551, 30.681789], [103.95062, 30.682352], [103.950131, 30.682632], [103.947226, 30.684489], [103.94525, 30.685491], [103.943521, 30.686345], [103.943054, 30.686545], [103.942688, 30.686684], [103.942521, 30.686747], [103.942196, 30.686856], [103.941865, 30.686956], [103.940886, 30.687208], [103.940095, 30.687422], [103.93951, 30.687598], [103.938799, 30.687881], [103.938446, 30.688056], [103.938091, 30.688251], [103.937516, 30.68868], [103.936986, 30.689045], [103.935881, 30.689812], [103.935769, 30.689888], [103.934924, 30.690558], [103.934144, 30.690965], [103.933678, 30.691148], [103.932723, 30.691503], [103.931303, 30.69203], [103.930833, 30.692232], [103.930552, 30.692358], [103.930126, 30.692548], [103.928262, 30.693252], [103.926832, 30.693707], [103.926459, 30.693767], [103.925879, 30.693856], [103.925239, 30.693961], [103.920075, 30.694599], [103.918857, 30.694721], [103.917868, 30.694751], [103.911024, 30.694445], [103.909714, 30.694516], [103.9084, 30.694692], [103.904336, 30.695541], [103.89925, 30.696531], [103.897995, 30.69679], [103.896749, 30.697033], [103.896109, 30.697124], [103.895484, 30.69718], [103.894824, 30.697203], [103.894167, 30.697195], [103.894101, 30.697191], [103.890561, 30.697165], [103.888795, 30.697147], [103.887914, 30.697126], [103.887037, 30.697078], [103.883502, 30.696799], [103.879969, 30.696495], [103.879884, 30.69649], [103.877865, 30.696313], [103.8776, 30.69629], [103.877027, 30.696245], [103.876459, 30.696206], [103.875889, 30.696188], [103.875321, 30.69619], [103.874742, 30.696229], [103.874168, 30.696291], [103.873591, 30.696387], [103.873019, 30.696511], [103.872464, 30.696659], [103.871919, 30.696829], [103.871387, 30.697033], [103.870857, 30.697252], [103.869062, 30.698085], [103.867784, 30.698672], [103.867353, 30.69887], [103.866202, 30.699352], [103.865008, 30.699762], [103.864318, 30.699947], [103.863688, 30.700106], [103.862998, 30.700234], [103.861997, 30.700378], [103.861377, 30.700446], [103.860776, 30.700489], [103.860059, 30.700502], [103.858986, 30.700517], [103.858366, 30.700522], [103.857793, 30.700551], [103.85723, 30.700606], [103.856717, 30.700673], [103.856207, 30.700776], [103.855718, 30.700908], [103.855235, 30.701064], [103.854761, 30.701242], [103.854304, 30.701453], [103.853855, 30.70168], [103.853411, 30.701936], [103.846578, 30.705925], [103.842424, 30.708321], [103.842091, 30.708512], [103.838307, 30.710652], [103.836927, 30.71145], [103.835367, 30.712336], [103.834933, 30.712525], [103.834238, 30.712818], [103.833502, 30.713075], [103.832753, 30.713264], [103.831985, 30.713411], [103.83161, 30.71347], [103.831232, 30.71351], [103.830461, 30.713552], [103.829662, 30.713548], [103.828849, 30.713465], [103.828057, 30.713342], [103.826911, 30.713067], [103.825557, 30.712599], [103.82414, 30.711886], [103.819209, 30.708591], [103.81781, 30.707596], [103.817541, 30.707411], [103.817432, 30.707337], [103.814361, 30.705282], [103.812276, 30.703879], [103.810172, 30.702478], [103.809016, 30.7017], [103.808515, 30.701373], [103.807315, 30.700528], [103.806429, 30.699843], [103.805279, 30.698929], [103.804321, 30.698146], [103.803638, 30.697594], [103.801827, 30.696102], [103.800958, 30.695417], [103.797745, 30.692766], [103.790962, 30.687265], [103.789767, 30.686272], [103.787919, 30.684717], [103.783213, 30.680921], [103.781555, 30.679688], [103.779299, 30.678254], [103.7772, 30.677058], [103.774383, 30.675744], [103.77175, 30.674652], [103.768882, 30.673758], [103.768665, 30.6737], [103.767038, 30.673244], [103.766001, 30.67301], [103.764972, 30.672796], [103.763893, 30.672589], [103.754616, 30.671232], [103.752988, 30.670909], [103.752517, 30.670798], [103.751708, 30.670582], [103.750982, 30.67038], [103.749832, 30.669984], [103.748783, 30.669559], [103.748319, 30.669371], [103.7474, 30.668918], [103.746611, 30.668514], [103.745261, 30.667729], [103.743964, 30.666903], [103.743034, 30.666283], [103.742488, 30.665919], [103.740907, 30.664864], [103.739912, 30.664209], [103.738923, 30.663642], [103.738094, 30.663222], [103.737237, 30.662847], [103.736295, 30.662472], [103.735393, 30.662213], [103.733744, 30.661772], [103.731001, 30.66113], [103.729292, 30.660686], [103.727165, 30.660027], [103.726368, 30.659761], [103.725524, 30.659588], [103.723531, 30.659015], [103.722734, 30.658758], [103.722227, 30.658676], [103.721821, 30.658657], [103.72144, 30.658691], [103.721239, 30.658737], [103.72075, 30.658896], [103.720357, 30.659062], [103.719841, 30.659305], [103.719409, 30.659557], [103.71903, 30.659847], [103.718775, 30.660117], [103.718444, 30.660511], [103.718006, 30.661284], [103.717547, 30.662071], [103.716644, 30.663592], [103.71564, 30.665046], [103.714995, 30.665931], [103.714205, 30.666863], [103.712019, 30.668984], [103.709794, 30.671054], [103.707574, 30.673113], [103.706515, 30.674257], [103.705614, 30.675522], [103.704693, 30.677144], [103.704047, 30.678992], [103.703791, 30.680295], [103.70364, 30.681651], [103.703635, 30.682977], [103.703861, 30.684481], [103.707114, 30.69972], [103.707258, 30.700057], [103.707441, 30.700685], [103.707613, 30.701317], [103.707838, 30.70186], [103.708261, 30.702307], [103.708834, 30.702607], [103.709137, 30.702774], [103.709358, 30.70302], [103.709468, 30.703315], [103.709456, 30.703625], [103.709321, 30.703912], [103.70908, 30.704144], [103.708575, 30.70441], [103.707759, 30.704741], [103.70664, 30.705229], [103.706135, 30.705523], [103.705207, 30.706188], [103.70459, 30.70679], [103.704461, 30.706958], [103.704389, 30.707052], [103.703876, 30.70809], [103.703735, 30.708389], [103.703146, 30.710754], [103.702738, 30.712251], [103.702422, 30.713052], [103.702291, 30.713356], [103.701361, 30.714762], [103.701268, 30.714904], [103.700885, 30.715369], [103.699782, 30.716366], [103.699316, 30.716698], [103.698736, 30.717074], [103.697068, 30.717829], [103.696736, 30.717948], [103.6964, 30.718049], [103.695225, 30.718374], [103.692995, 30.718982], [103.692203, 30.719203], [103.691195, 30.719486], [103.689494, 30.719935], [103.687925, 30.720355], [103.687544, 30.72045], [103.686694, 30.72066], [103.683555, 30.721315], [103.68239, 30.721539], [103.680911, 30.721753], [103.67965, 30.721934], [103.678938, 30.722031], [103.672452, 30.722732], [103.667597, 30.723319], [103.666665, 30.723475], [103.665049, 30.723823], [103.664483, 30.723968], [103.662905, 30.724419], [103.661541, 30.724886], [103.658966, 30.725958], [103.658363, 30.726267], [103.657124, 30.726921], [103.6558, 30.727751], [103.653694, 30.729177], [103.653335, 30.729462], [103.652869, 30.729838], [103.650031, 30.732572], [103.648496, 30.734487], [103.647387, 30.736196], [103.646266, 30.738204], [103.645514, 30.739984], [103.644676, 30.742429], [103.64446, 30.743127], [103.643621, 30.745411], [103.642939, 30.746792], [103.642111, 30.748195], [103.641322, 30.749361], [103.640495, 30.750425], [103.63941, 30.751722], [103.636662, 30.754989], [103.635868, 30.755957], [103.635475, 30.756439], [103.633372, 30.758926], [103.632908, 30.759441], [103.632409, 30.759977], [103.631442, 30.760912], [103.629912, 30.762233], [103.629451, 30.762595], [103.628087, 30.763542], [103.626606, 30.764462], [103.625628, 30.765025], [103.624636, 30.765618], [103.623544, 30.766292], [103.622749, 30.766832], [103.621867, 30.767665], [103.621513, 30.768038], [103.621178, 30.768453], [103.620742, 30.76909], [103.620507, 30.769507], [103.620181, 30.77019], [103.619861, 30.771104], [103.619592, 30.772322], [103.619252, 30.774114], [103.619109, 30.774654], [103.618978, 30.775035], [103.618731, 30.775731], [103.618578, 30.776035], [103.618369, 30.77646], [103.618335, 30.77652], [103.617982, 30.777133], [103.617795, 30.777458], [103.617678, 30.777625], [103.616601, 30.779015], [103.615229, 30.78027], [103.613882, 30.781138], [103.613544, 30.781314], [103.613167, 30.781535], [103.612732, 30.781751], [103.612272, 30.781959], [103.611952, 30.782095], [103.611536, 30.782263], [103.611221, 30.782372], [103.610381, 30.78263], [103.610021, 30.782724], [103.609577, 30.782829], [103.60747, 30.783352], [103.606399, 30.78371], [103.605924, 30.783907], [103.605229, 30.784246], [103.60438, 30.78481], [103.603849, 30.785188], [103.603102, 30.7858], [103.602297, 30.786435], [103.601063, 30.787349], [103.600736, 30.78758], [103.600507, 30.787731], [103.600087, 30.788017], [103.599057, 30.788636], [103.596225, 30.79024], [103.593497, 30.79183], [103.587164, 30.79539], [103.585513, 30.796372], [103.581733, 30.798438], [103.581452, 30.798669], [103.581353, 30.798734], [103.581256, 30.798827], [103.581206, 30.798897], [103.580951, 30.799161], [103.577558, 30.804119], [103.577187, 30.804557], [103.576796, 30.804982], [103.576502, 30.805236], [103.576126, 30.805531], [103.575766, 30.805749], [103.575375, 30.805962], [103.574958, 30.806154], [103.574438, 30.806336], [103.573934, 30.806483], [103.573478, 30.80659], [103.572975, 30.806655], [103.572482, 30.806692], [103.572047, 30.806703], [103.571522, 30.80667], [103.571057, 30.80662], [103.570125, 30.806485], [103.568722, 30.806282], [103.568589, 30.806292], [103.568457, 30.806338], [103.568359, 30.806411], [103.567635, 30.807436], [103.566751, 30.808687], [103.566497, 30.80894], [103.565698, 30.809436], [103.565114, 30.809795], [103.56437, 30.81035], [103.564176, 30.81051], [103.562923, 30.811541], [103.561479, 30.812711], [103.560386, 30.813676], [103.559789, 30.814394], [103.558994, 30.815475], [103.55807, 30.816782], [103.557987, 30.816851], [103.557852, 30.817036], [103.55764, 30.817366], [103.55729, 30.817757], [103.556744, 30.818119], [103.556497, 30.818241], [103.55468, 30.81932], [103.554328, 30.819598], [103.554257, 30.819795], [103.55424, 30.819963], [103.554297, 30.820107], [103.554436, 30.820256], [103.555458, 30.820889], [103.555436, 30.821034], [103.555308, 30.821128], [103.55496, 30.821372], [103.554762, 30.821492], [103.554548, 30.821453], [103.552891, 30.820866], [103.552642, 30.820496], [103.552116, 30.819192], [103.552077, 30.819096]], "foot": [[103.552077, 30.819096], [103.551574, 30.817837], [103.550975, 30.817378], [103.550815, 30.816998], [103.550366, 30.816679], [103.549987, 30.816609], [103.549548, 30.81635], [103.54851, 30.816352], [103.547991, 30.816504], [103.546903, 30.815936], [103.546736, 30.81587], [103.546195, 30.815657], [103.545137, 30.814899], [103.544608, 30.81473], [103.543411, 30.814153], [103.542882, 30.814074], [103.542383, 30.814125], [103.541825, 30.814106], [103.540216, 30.814486], [103.540109, 30.814511], [103.53949, 30.814272], [103.539311, 30.814283], [103.538692, 30.814164], [103.538453, 30.814325], [103.537715, 30.814357], [103.537056, 30.814518], [103.536657, 30.81472], [103.536348, 30.815351], [103.536089, 30.815621], [103.535819, 30.815823], [103.535596, 30.815838], [103.535499, 30.81577], [103.53551, 30.815453], [103.53539, 30.815123], [103.535251, 30.815013], [103.534892, 30.815054], [103.534363, 30.815166], [103.533745, 30.815497], [103.533426, 30.815618], [103.533334, 30.815596], [103.533266, 30.815539], [103.533096, 30.815209], [103.533028, 30.815185], [103.532967, 30.815199], [103.532837, 30.81541], [103.532927, 30.81568], [103.532909, 30.815886], [103.532747, 30.81591], [103.532488, 30.815651], [103.532478, 30.815251], [103.532468, 30.8147], [103.532408, 30.81457], [103.532266, 30.814577], [103.532189, 30.814641], [103.531959, 30.815122], [103.531752, 30.815457], [103.531669, 30.815518], [103.531592, 30.815505], [103.531553, 30.815474], [103.53162, 30.815263], [103.53168, 30.814993], [103.53163, 30.814968], [103.531565, 30.814953], [103.531481, 30.814963], [103.531331, 30.815254], [103.531132, 30.815604], [103.531241, 30.815864], [103.531092, 30.816035], [103.530912, 30.815905], [103.530772, 30.815645], [103.530653, 30.815265], [103.530802, 30.814795], [103.531022, 30.814524], [103.530992, 30.814364], [103.530822, 30.814485], [103.530344, 30.814846], [103.530117, 30.815431], [103.530237, 30.815788], [103.530255, 30.816366], [103.53041, 30.816581], [103.530395, 30.816702], [103.530313, 30.816693], [103.530023, 30.816326], [103.529483, 30.815752], [103.52926, 30.814924], [103.529402, 30.813909], [103.52919, 30.813549], [103.528987, 30.813184], [103.528756, 30.812694], [103.528589, 30.812536], [103.528491, 30.812659], [103.528559, 30.81298], [103.528486, 30.813087], [103.528401, 30.813068], [103.528405, 30.81296], [103.528358, 30.812736], [103.528314, 30.812477], [103.528309, 30.811982], [103.528258, 30.811862], [103.52815, 30.811611], [103.527382, 30.811267], [103.526351, 30.810975], [103.525876, 30.811187], [103.525686, 30.811221], [103.525341, 30.811611], [103.524857, 30.811765], [103.524765, 30.81185], [103.524816, 30.811959], [103.52502, 30.81202], [103.525346, 30.812054], [103.525733, 30.812294], [103.525922, 30.812474], [103.525968, 30.812562], [103.525978, 30.81308], [103.525892, 30.813326], [103.526003, 30.813791], [103.526343, 30.813964]], "nodes": [{"name": "康道牌坊 · 圣灯广场", "km": 0, "desc": "起点 · 合影 · 停车场", "pos": [103.552255, 30.819056]}, {"name": "御龙桥", "km": 0.55, "desc": "味江古桥 · 江畔可玩水", "pos": [103.548136, 30.816462]}, {"name": "乳泉瀑布", "km": 1.25, "desc": "竹林小瀑布 · 出片点", "pos": [103.541621, 30.814154]}, {"name": "回龙院", "km": 2.8, "desc": "半山茶馆 · 补给 · 公厕", "pos": [103.535211, 30.812828]}, {"name": "洗心池", "km": 3.35, "desc": "山林观景 · 休息点", "pos": [103.530252, 30.816274]}, {"name": "忘归台", "km": 3.95, "desc": "观景台 · 俯瞰河谷", "pos": [103.528513, 30.812763]}, {"name": "光严禅院", "km": 5.0, "desc": "晋代千年古寺 · 终点", "pos": [103.525726, 30.814894]}]};
+
+/* ============ MAP ============ */
+const map = L.map('map', {zoomControl:false, attributionControl:true}).setView([30.72,103.70],11);
+L.control.zoom({position:'bottomright'}).addTo(map);
+
+const road = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',{
+  subdomains:'1234', maxZoom:18, attribution:'© 高德地图'
+});
+const sat = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',{
+  subdomains:'1234', maxZoom:18, attribution:'© 高德卫星'
+});
+const satLbl = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',{
+  subdomains:'1234', maxZoom:18, attribution:'© 高德'
+});
+road.addTo(map);
+L.control.layers({'高德标准':road,'高德卫星':L.layerGroup([sat,satLbl])},{},{position:'topleft'}).addTo(map);
+
+/* retry a tile once on transient network errors */
+[road,sat,satLbl].forEach(layer=>{
+  layer.on('tileerror',e=>{
+    const t=e.tile;
+    if(!t || t.dataset.retried) return;
+    t.dataset.retried='1';
+    setTimeout(()=>{ const src=t.src; t.src=''; t.src=src; },400);
+  });
+});
+
+const toLatLon = p => [p[1], p[0]];
+const allFoot = MAP_DATA.foot.map(toLatLon);
+
+/* white outline + scenic foot track */
+L.polyline(allFoot,{color:'#ffffff',weight:9,opacity:.7}).addTo(map);
+const footLine = L.polyline(allFoot,{color:'#2b7a55',weight:4.5,opacity:.95,dashArray:'1,9',lineCap:'round'}).addTo(map);
+
+/* town marker (scenic area context) */
+L.marker([30.813673,103.550022],{
+  icon:L.divIcon({className:'',html:'<div class="townmarker" style="width:26px;height:26px;font-size:13px">🏮</div>',iconSize:[26,26],iconAnchor:[13,13]})
+}).addTo(map).bindPopup('<div class="pop-name">街子古镇</div><div class="pop-desc">古镇逛吃 · 4A景区</div>');
+
+/* lunch venue marker (no connecting line) */
+const foodMarker = L.marker([30.8190,103.5688],{
+  icon:L.divIcon({className:'',html:'<div class="foodmarker" style="width:30px;height:30px;font-size:15px">🍽️</div>',iconSize:[30,30],iconAnchor:[15,15]})
+}).addTo(map);
+foodMarker.bindPopup('<div class="pop-name">不远·如院（午餐）</div><div class="pop-km">云南菜 · 茶馆 · 4.4分</div><div class="pop-desc">川西旅游线与花园巷交叉口东80米 · 09:00–21:00 · 饭后可玩德州/麻将</div>');
+
+/* node markers */
+MAP_DATA.nodes.forEach((n,i)=>{
+  const isEnd = i===MAP_DATA.nodes.length-1;
+  const cls = isEnd ? 'nodemarker end' : 'nodemarker';
+  const label = isEnd ? '寺' : (i+1);
+  const mk = L.marker([n.pos[1],n.pos[0]],{
+    icon:L.divIcon({className:'',html:`<div class="${cls}" style="width:28px;height:28px">${label}</div>`,iconSize:[28,28],iconAnchor:[14,14]})
+  }).addTo(map);
+  mk.bindPopup(`<div class="pop-name">${n.name}</div><div class="pop-km">${n.km} km</div><div class="pop-desc">${n.desc}</div>`);
+});
+
+const group = L.featureGroup([footLine, foodMarker]);
+function fitAll(){ map.fitBounds(group.getBounds(),{padding:[40,40]}); }
+fitAll();
+
+/* play animation */
+let playing=false;
+const _playBtn=document.getElementById('btn-play');
+if(_playBtn){_playBtn.addEventListener('click',()=>{
+  if(playing) return; playing=true;
+  footLine.setLatLngs([]);
+  const steps=50;
+  let i=0;
+  const timer=setInterval(()=>{
+    i++;
+    const fi=Math.min(Math.ceil(allFoot.length*i/steps),allFoot.length);
+    footLine.setLatLngs(allFoot.slice(0,fi));
+    if(i>=steps){clearInterval(timer);playing=false;}
+  },55);
+});}
+const _resetBtn=document.getElementById('btn-reset');
+if(_resetBtn){_resetBtn.addEventListener('click',()=>{
+  footLine.setLatLngs(allFoot); fitAll();
+});}
+
+/* AMap navigation URIs */
+const navToKangdao = 'https://uri.amap.com/navigation?to=103.552255,30.819056,'+encodeURIComponent('凤栖山康道')+'&mode=car&coordinate=gaode&callnative=1&src=teambuild';
+const navBack = 'https://uri.amap.com/navigation?from=103.552255,30.819056,'+encodeURIComponent('凤栖山康道')+'&to=103.978131,30.646026,'+encodeURIComponent('机投桥地铁站')+'&mode=car&coordinate=gaode&callnative=1&src=teambuild';
+const _navCarBtn=document.getElementById('btn-nav-car');
+if(_navCarBtn){_navCarBtn.addEventListener('click',()=>window.open(navToKangdao,'_blank'));}
+const _navBackBtn=document.getElementById('btn-nav-back');
+if(_navBackBtn){_navBackBtn.addEventListener('click',()=>window.open(navBack,'_blank'));}
+
+/* ============ REVEAL ON SCROLL ============ */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
+},{threshold:0, rootMargin:'0px 0px -10% 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+/* fallback: reveal anything still hidden after 2.5s (robustness for tall blocks) */
+setTimeout(()=>{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));},2500);
+
+/* ============ BACK TO TOP ============ */
+const tt=document.getElementById('toTop');
+window.addEventListener('scroll',()=>{
+  tt.classList.toggle('show',window.scrollY>600);
+});
+tt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ============ LIGHTBOX ============ */
+const galleryImgs=[...document.querySelectorAll('.gi img')];
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lbImg');
+const lbCap=document.getElementById('lbCap');
+let idx=0;
+function show(i){
+  idx=(i+galleryImgs.length)%galleryImgs.length;
+  const s=galleryImgs[idx];
+  lbImg.src=s.src; lbCap.textContent=s.getAttribute('data-cap')||s.alt||'';
+}
+galleryImgs.forEach((s,i)=>s.closest('.gi').addEventListener('click',()=>{lb.classList.add('show');show(i);}));
+document.getElementById('lbClose').addEventListener('click',()=>lb.classList.remove('show'));
+document.getElementById('lbPrev').addEventListener('click',e=>{e.stopPropagation();show(idx-1);});
+document.getElementById('lbNext').addEventListener('click',e=>{e.stopPropagation();show(idx+1);});
+lb.addEventListener('click',e=>{if(e.target===lb)lb.classList.remove('show');});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('show'))return;
+  if(e.key==='Escape')lb.classList.remove('show');
+  if(e.key==='ArrowLeft')show(idx-1);
+  if(e.key==='ArrowRight')show(idx+1);
+});
+
+/* ============ 10 月 24 日天气（Open-Meteo · 50 分钟缓存） ============ */
+const WX_EVENT_DATE = '2026-10-24';
+const WX_LATITUDE = 30.819056;
+const WX_LONGITUDE = 103.552255;
+const WX_CACHE_KEY = 'fengqishan-weather:2026-10-24:v1';
+const WX_CACHE_TTL = 50 * 60 * 1000;
+const WX_WEATHER = {
+  0: ['晴', '☀️'],
+  1: ['大致晴', '🌤️'],
+  2: ['多云', '⛅'],
+  3: ['阴', '☁️'],
+  45: ['雾', '🌫️'],
+  48: ['雾凇', '🌫️'],
+  51: ['小毛毛雨', '🌦️'],
+  53: ['毛毛雨', '🌦️'],
+  55: ['较强毛毛雨', '🌦️'],
+  56: ['冻毛毛雨', '🌧️'],
+  57: ['较强冻毛毛雨', '🌧️'],
+  61: ['小雨', '🌧️'],
+  63: ['中雨', '🌧️'],
+  65: ['大雨', '🌧️'],
+  66: ['冻雨', '🌧️'],
+  67: ['较强冻雨', '🌧️'],
+  71: ['小雪', '🌨️'],
+  73: ['中雪', '🌨️'],
+  75: ['大雪', '🌨️'],
+  77: ['米雪', '🌨️'],
+  80: ['小阵雨', '🌦️'],
+  81: ['中阵雨', '🌧️'],
+  82: ['强阵雨', '⛈️'],
+  85: ['阵雪', '🌨️'],
+  86: ['强阵雪', '🌨️'],
+  95: ['雷雨', '⛈️'],
+  96: ['雷雨伴冰雹', '⛈️'],
+  99: ['强雷雨伴冰雹', '⛈️']
+};
+const WX_DIRECTIONS = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+const wxEls = {
+  ovIcon: document.getElementById('ovWeatherIcon'),
+  ovCond: document.getElementById('ovWeatherCond'),
+  ovDetail: document.getElementById('ovWeatherDetail'),
+  icon: document.getElementById('weatherIcon'),
+  cond: document.getElementById('weatherCond'),
+  temp: document.getElementById('weatherTemp'),
+  tags: document.getElementById('weatherTags'),
+  adviceTitle: document.getElementById('weatherAdviceTitle'),
+  advice: document.getElementById('weatherAdvice')
+};
+
+function wxNumber(value){
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function wxRound(value){
+  return value == null ? '—' : Math.round(value);
+}
+
+function wxDecimal(value){
+  return value == null ? '—' : Number(value).toFixed(1);
+}
+
+function wxRange(min, max){
+  if(min == null && max == null) return '—';
+  return `${wxRound(min)}℃ ~ ${wxRound(max)}℃`;
+}
+
+function wxWindDirection(degrees){
+  if(degrees == null) return '风向未知';
+  return `${WX_DIRECTIONS[Math.round(degrees / 45) % 8]}风`;
+}
+
+function wxWeatherInfo(code){
+  return WX_WEATHER[code] || ['天气未知', '🌡️'];
+}
+
+function wxIsRainy(code){
+  return [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].includes(code);
+}
+
+function wxAdviceFor(code, probability, windSpeed){
+  if(wxIsRainy(code) || (probability != null && probability >= 60)){
+    return {
+      title: '⚠️ 雨天徒步提示',
+      text: '当日预报有降水，康道石板路和石阶可能湿滑。建议穿防滑运动鞋、携带雨衣（优于雨伞）和手机防水袋；雨势较大时改为走到回龙院折返。'
+    };
+  }
+  if(probability != null && probability >= 30){
+    return {
+      title: '🌦️ 阵雨备选提示',
+      text: '当日存在阵雨可能，建议随身带轻便雨衣和防滑鞋。出发前再看一次实时预报，若转为中到大雨，启用回龙院折返方案。'
+    };
+  }
+  if(windSpeed != null && windSpeed >= 30){
+    return {
+      title: '🌬️ 大风提示',
+      text: '当日风速可能较大，山林路段注意保暖并固定帽具。石板路干燥时可正常徒步，雨后仍需防滑。'
+    };
+  }
+  return {
+    title: '🥾 徒步提示',
+    text: '当日暂无明显降水信号，适合按计划徒步。仍建议穿防滑运动鞋、带薄外套，出发前再复核一次天气。'
+  };
+}
+
+function wxTags(rows){
+  wxEls.tags.replaceChildren(...rows.map(([icon, text])=>{
+    const tag = document.createElement('span');
+    tag.className = 'w-tag';
+    tag.textContent = `${icon} ${text}`;
+    return tag;
+  }));
+}
+
+function wxRender(data, options = {}){
+  const info = wxWeatherInfo(data.code);
+  const condition = info[0];
+  const icon = info[1];
+  const probability = data.precipitationProbability;
+  const summary = `${wxRange(data.tempMin, data.tempMax)} · 降水概率 ${wxRound(probability)}%`;
+  const advice = wxAdviceFor(data.code, probability, data.windSpeedMax);
+
+  wxEls.ovIcon.textContent = icon;
+  wxEls.ovCond.textContent = condition;
+  wxEls.ovDetail.textContent = summary;
+  wxEls.icon.textContent = icon;
+  wxEls.cond.textContent = condition;
+  wxEls.temp.textContent = wxRange(data.tempMin, data.tempMax);
+  wxEls.adviceTitle.textContent = advice.title;
+  wxEls.advice.textContent = advice.text;
+
+  const rows = [];
+  if(probability != null) rows.push(['💧', `降水概率 ${wxRound(probability)}%`]);
+  if(data.precipitationSum != null) rows.push(['🌧️', `预计降水 ${wxDecimal(data.precipitationSum)} mm`]);
+  if(data.humidity != null) rows.push(['💦', `平均湿度 ${wxRound(data.humidity)}%`]);
+  if(data.windSpeedMax != null) rows.push(['🌬️', `${wxWindDirection(data.windDirection)} ${wxRound(data.windSpeedMax)} km/h`]);
+  if(data.apparentMin != null || data.apparentMax != null) rows.push(['🌡️', `体感 ${wxRange(data.apparentMin, data.apparentMax)}`]);
+  if(data.uvIndex != null) rows.push(['☀️', `紫外线指数 ${wxRound(data.uvIndex)}`]);
+  wxTags(rows.length ? rows : [['ℹ️', '接口未返回可展示的天气指标']]);
+
+}
+
+function wxRenderError(message){
+  wxEls.ovIcon.textContent = '⚠️';
+  wxEls.ovCond.textContent = '暂不可用';
+  wxEls.ovDetail.textContent = message;
+  wxEls.icon.textContent = '⚠️';
+  wxEls.cond.textContent = '暂不可用';
+  wxEls.temp.textContent = '—';
+  wxTags([['⚠️', message]]);
+  wxEls.adviceTitle.textContent = '⚠️ 天气获取失败';
+  wxEls.advice.textContent = '请检查网络后刷新页面。Open-Meteo 是公开接口，无需 API Key。';
+}
+
+function wxReadCache(allowStale = false){
+  try {
+    const raw = localStorage.getItem(WX_CACHE_KEY);
+    if(!raw) return null;
+    const item = JSON.parse(raw);
+    if(!item || item.version !== 1 || item.date !== WX_EVENT_DATE || !item.data) return null;
+    const age = Math.max(0, Date.now() - Number(item.fetchedAt || 0));
+    const expired = age >= WX_CACHE_TTL;
+    if(expired && !allowStale) return null;
+    return { data: item.data, fetchedAt: item.fetchedAt, expired };
+  } catch {
+    return null;
+  }
+}
+
+function wxWriteCache(data){
+  try {
+    localStorage.setItem(WX_CACHE_KEY, JSON.stringify({
+      version: 1,
+      date: WX_EVENT_DATE,
+      fetchedAt: Date.now(),
+      data
+    }));
+  } catch {
+    /* localStorage 不可用时继续展示本次请求结果 */
+  }
+}
+
+function wxNormalize(payload){
+  const daily = payload.daily || {};
+  const date = daily.time?.[0];
+  if(date !== WX_EVENT_DATE) throw new Error('接口返回日期与目标日期不一致');
+
+  const first = name => wxNumber(daily[name]?.[0]);
+  const humidityValues = (payload.hourly?.relative_humidity_2m || [])
+    .map(wxNumber)
+    .filter(value => value != null);
+  const humidity = humidityValues.length
+    ? humidityValues.reduce((sum, value) => sum + value, 0) / humidityValues.length
+    : null;
+
+  return {
+    date,
+    code: first('weather_code') ?? 0,
+    tempMax: first('temperature_2m_max'),
+    tempMin: first('temperature_2m_min'),
+    apparentMax: first('apparent_temperature_max'),
+    apparentMin: first('apparent_temperature_min'),
+    precipitationProbability: first('precipitation_probability_max'),
+    precipitationSum: first('precipitation_sum'),
+    windSpeedMax: first('wind_speed_10m_max'),
+    windDirection: first('wind_direction_10m_dominant'),
+    uvIndex: first('uv_index_max'),
+    humidity
+  };
+}
+
+async function wxLoad(){
+  const cached = wxReadCache();
+  if(cached){
+    wxRender(cached.data, { cached: true, fetchedAt: cached.fetchedAt });
+    return;
+  }
+
+  const targetTime = new Date(`${WX_EVENT_DATE}T00:00:00+08:00`).getTime();
+  const daysAhead = (targetTime - Date.now()) / 86400000;
+  if(daysAhead > 16){
+    const stale = wxReadCache(true);
+    if(stale){
+      wxRender(stale.data, { stale: true, fetchedAt: stale.fetchedAt });
+    } else {
+      wxRenderError('该日期尚未进入 Open-Meteo 的 16 天预报窗口，临近日期再打开页面即可。');
+    }
+    return;
+  }
+
+  const params = new URLSearchParams({
+    latitude: WX_LATITUDE.toFixed(6),
+    longitude: WX_LONGITUDE.toFixed(6),
+    start_date: WX_EVENT_DATE,
+    end_date: WX_EVENT_DATE,
+    timezone: 'Asia/Shanghai',
+    daily: 'weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_probability_max,precipitation_sum,wind_speed_10m_max,wind_direction_10m_dominant,uv_index_max',
+    hourly: 'relative_humidity_2m'
+  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`, {
+      signal: controller.signal,
+      cache: 'no-store',
+      headers: { Accept: 'application/json' }
+    });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    if(payload.error) throw new Error(payload.reason || 'API error');
+    const data = wxNormalize(payload);
+    wxWriteCache(data);
+    wxRender(data, { cached: false, fetchedAt: Date.now() });
+  } catch (error) {
+    console.warn('[weather] Open-Meteo request failed:', error);
+    const stale = wxReadCache(true);
+    if(stale){
+      wxRender(stale.data, { stale: true, fetchedAt: stale.fetchedAt });
+    } else {
+      wxRenderError('无法获取 10 月 24 日天气，请检查网络或稍后刷新。');
+    }
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+wxLoad();
+</script>
+</body>
+</html>
